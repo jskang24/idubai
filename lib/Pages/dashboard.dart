@@ -5,6 +5,7 @@ import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import '../Widgets/Dashboard_bg.dart';
 import './bookmarks.dart';
 import '../Widgets/navbar.dart';
+import './categories.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -75,110 +76,256 @@ class _DashboardState extends State<Dashboard> {
       Navigator.pushNamed(context, '/');
     } else if (_selectedTab == _SelectedTab.favorite) {
       Navigator.pushNamed(context, '/second');
+    } else if (_selectedTab == _SelectedTab.search) {
+      Navigator.pushNamed(context, '/third');
+    } else if (_selectedTab == _SelectedTab.person) {
+      Navigator.pushNamed(context, '/fourth');
     }
+  }
+
+  List bookMarkStatus = [false, false, false, false, false];
+
+  initState() {
+    print(bookMarkStatus[0]);
+  }
+
+  void changeBookMark(int index) {
+    if (bookMarkStatus[index])
+      setState(() {
+        bookMarkStatus[index] = false;
+      });
+    else
+      setState(() {
+        bookMarkStatus[index] = true;
+      });
+    print(bookMarkStatus[index]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Stack(
-            children: [
-              ContainerTwoColours(
-                progress: 0.2,
-                widthSize: MediaQuery.of(context).size.width,
-                heightSize: 400,
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(20, 60, 20, 50),
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Color.fromARGB(0xFF, 0xAE, 0xD8, 0xDA),
+    return DefaultTabController(
+      initialIndex: 1,
+      length: 5,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          children: [
+            Stack(
+              children: [
+                ContainerTwoColours(
+                  progress: 0.2,
+                  widthSize: MediaQuery.of(context).size.width,
+                  heightSize: 400,
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 60, 20, 50),
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Color.fromARGB(0xFF, 0xAE, 0xD8, 0xDA),
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 30,
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Search...",
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 30,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Search...",
+                              ),
+                              style: TextStyle(fontSize: 14),
                             ),
-                            style: TextStyle(fontSize: 14),
+                            width: 300,
                           ),
-                          width: 300,
-                        ),
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          icon: Icon(Icons.search),
-                          onPressed: () {},
-                        ),
-                      ],
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: Icon(Icons.search),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(20, 120, 20, 0),
-                child: Container(
-                    child: CarouselSlider(
-                  options: CarouselOptions(
-                    aspectRatio: 1.5,
-                    enlargeCenterPage: true,
-                    scrollDirection: Axis.horizontal,
-                    autoPlay: true,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 120, 20, 0),
+                  child: Container(
+                      child: CarouselSlider(
+                    options: CarouselOptions(
+                      aspectRatio: 1.5,
+                      enlargeCenterPage: true,
+                      scrollDirection: Axis.horizontal,
+                      autoPlay: true,
+                    ),
+                    items: imageSliders,
+                  )),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 20,
+                child: Text(
+                  "Popular Places",
+                  style: TextStyle(
+                    fontFamily: 'Varela Round',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
-                  items: imageSliders,
-                )),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 5,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Container(
+                        width: 120,
+                        height: 200,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 120,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              width: 120,
+                              height: 50,
+                              child: Row(
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 100,
+                                        child: Text(
+                                          "Place " + index.toString(),
+                                          style: TextStyle(
+                                            fontFamily: "Varela Round",
+                                            fontSize: 14,
+                                          ),
+                                          // textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 100,
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.location_pin,
+                                              size: 15,
+                                            ),
+                                            Text(
+                                              "Location " + index.toString(),
+                                              style: TextStyle(
+                                                fontFamily: "Varela Round",
+                                                fontSize: 12,
+                                                color: Colors.grey,
+                                              ),
+                                              // textAlign: TextAlign.left,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        width: 20,
+                                        height: 20,
+                                        child: IconButton(
+                                          icon: bookMarkStatus[index]
+                                              ? Icon(
+                                                  Icons.bookmark,
+                                                  color: Color.fromARGB(
+                                                      255, 238, 223, 90),
+                                                )
+                                              : Icon(
+                                                  Icons.bookmark_outline,
+                                                ),
+                                          iconSize: 20,
+                                          padding: EdgeInsets.zero,
+                                          onPressed: () {
+                                            changeBookMark(index);
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 30),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.only(bottom: 10),
+          child: DotNavigationBar(
+            backgroundColor: Color.fromARGB(0xFF, 0xAE, 0xD8, 0xDA),
+            margin: EdgeInsets.only(left: 10, right: 10),
+            currentIndex: _SelectedTab.values.indexOf(_selectedTab),
+            dotIndicatorColor: Colors.white,
+            unselectedItemColor: Colors.white,
+            // enableFloatingNavBar: false,
+            onTap: _handleIndexChanged,
+            items: [
+              /// Home
+              DotNavigationBarItem(
+                icon: Icon(Icons.home),
+                selectedColor: Colors.white,
+              ),
+
+              /// Likes
+              DotNavigationBarItem(
+                icon: Icon(Icons.favorite),
+                selectedColor: Colors.white,
+              ),
+
+              /// Search
+              DotNavigationBarItem(
+                icon: Icon(Icons.search),
+                selectedColor: Colors.white,
+              ),
+
+              /// Profile
+              DotNavigationBarItem(
+                icon: Icon(Icons.person),
+                selectedColor: Colors.white,
               ),
             ],
           ),
-        ],
-      ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 10),
-        child: DotNavigationBar(
-          backgroundColor: Color.fromARGB(0xFF, 0xAE, 0xD8, 0xDA),
-          margin: EdgeInsets.only(left: 10, right: 10),
-          currentIndex: _SelectedTab.values.indexOf(_selectedTab),
-          dotIndicatorColor: Colors.white,
-          unselectedItemColor: Colors.white,
-          // enableFloatingNavBar: false,
-          onTap: _handleIndexChanged,
-          items: [
-            /// Home
-            DotNavigationBarItem(
-              icon: Icon(Icons.home),
-              selectedColor: Colors.white,
-            ),
-
-            /// Likes
-            DotNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              selectedColor: Colors.white,
-            ),
-
-            /// Search
-            DotNavigationBarItem(
-              icon: Icon(Icons.search),
-              selectedColor: Colors.white,
-            ),
-
-            /// Profile
-            DotNavigationBarItem(
-              icon: Icon(Icons.person),
-              selectedColor: Colors.white,
-            ),
-          ],
         ),
       ),
     );
