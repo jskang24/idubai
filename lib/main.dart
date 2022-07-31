@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'Pages/dashboard.dart';
 import 'Pages/categories.dart';
 import 'Pages/bookmarks.dart';
 import 'Pages/details.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  signInAnon() async {
+    bool isAlready = false;
+    await FirebaseAuth.instance.signInAnonymously();
+    String uname = FirebaseAuth.instance.currentUser!.uid;
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('users').get();
+    final allData = await querySnapshot.docs.map((doc) => doc.data()).toList();
+    for (var i in allData) {
+      if ((i as Map<String, dynamic>)['uid'] == uname) {
+        isAlready = true;
+      }
+    }
+    if (isAlready == false) {
+      await FirebaseFirestore.instance.collection("users").doc(uname).set({
+        "uid": uname,
+      });
+    }
+  }
+
+  signInAnon();
   runApp(MaterialApp(
     initialRoute: '/',
     routes: {

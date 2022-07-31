@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import '../Widgets/naviBar.dart';
 
 class DetailPage extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class _detailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: NaviBar(tabIndex: 3),
       body: SlidingUpPanel(
         isDraggable: false,
         defaultPanelState: PanelState.OPEN,
