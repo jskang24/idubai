@@ -1,4 +1,3 @@
-import '../Widgets/tiles.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/material.dart';
 import '../Widgets/naviBar.dart';
@@ -12,6 +11,7 @@ class Categories extends StatefulWidget {
   _CategoriesState createState() => _CategoriesState();
 }
 
+// H
 class _CategoriesState extends State<Categories> {
   var tags = [];
   var imgurl = [];

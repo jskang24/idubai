@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 
+// H
 class NaviBar extends StatefulWidget {
   final int tabIndex;
   NaviBar({required this.tabIndex});
@@ -41,10 +42,10 @@ class _NaviBarState extends State<NaviBar> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
       child: GNav(
-        rippleColor: Colors.grey[300]!,
+        activeColor: Color.fromARGB(255, 113, 180, 231),
+        rippleColor: Color.fromARGB(255, 113, 180, 231),
         hoverColor: Colors.grey[100]!,
         gap: 8,
-        activeColor: Colors.black,
         iconSize: 24,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         duration: Duration(milliseconds: 400),

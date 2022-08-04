@@ -9,6 +9,8 @@ import './categories.dart';
 import './details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// H
+
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 

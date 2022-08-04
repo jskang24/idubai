@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Pages/dashboard.dart';
 import 'Pages/categories.dart';
 import 'Pages/bookmarks.dart';
-import 'Pages/settings.dart';
+import './Pages/settings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

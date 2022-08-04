@@ -24,6 +24,7 @@ class _detailPageState extends State<DetailPage> {
     fetchData();
   }
 
+// H
   void fetchTags() async {
     FirebaseFirestore.instance
         .collection('tags')
