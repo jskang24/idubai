@@ -31,7 +31,7 @@ class _NaviBarState extends State<NaviBar> {
       style: optionStyle,
     ),
     Text(
-      'fedex',
+      'Settings',
       style: optionStyle,
     ),
   ];
@@ -64,8 +64,8 @@ class _NaviBarState extends State<NaviBar> {
             text: 'Categories',
           ),
           GButton(
-            icon: LineIcons.fedex,
-            text: 'fedex',
+            icon: LineIcons.cog,
+            text: 'Settings',
           ),
         ],
         selectedIndex: _selectedIndex,

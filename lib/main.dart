@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Pages/dashboard.dart';
 import 'Pages/categories.dart';
 import 'Pages/bookmarks.dart';
-import 'Pages/details.dart';
+import 'Pages/settings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +27,12 @@ void main() async {
       await FirebaseFirestore.instance.collection("users").doc(uname).set({
         "uid": uname,
       });
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uname)
+          .collection("bookmarks")
+          .doc("dummy")
+          .set({});
     }
   }
 
@@ -39,7 +45,7 @@ void main() async {
       // When navigating to the "/second" route, build the SecondScreen widget.
       '/second': (context) => const Bookmarks(),
       '/third': (context) => const Categories(),
-      '/fourth': (context) => DetailPage()
+      '/fourth': (context) => SettingScreen(),
     },
   ));
 }

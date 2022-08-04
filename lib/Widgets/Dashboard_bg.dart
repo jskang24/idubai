@@ -8,7 +8,7 @@ class ContainerTwoColours extends StatelessWidget {
   final double heightSize;
 
   const ContainerTwoColours({
-    this.backgroundColor = const Color.fromARGB(0xFF, 0xAE, 0xD8, 0xDA),
+    this.backgroundColor = const Color.fromARGB(255, 113, 180, 231),
     this.progressColor = Colors.white,
     required this.progress,
     required this.widthSize,

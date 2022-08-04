@@ -2,20 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../Widgets/naviBar.dart';
 import './details.dart';
 
-class Bookmarks extends StatefulWidget {
-  const Bookmarks({super.key});
+import '../Widgets/naviBar.dart';
+
+class CategoriesDetail extends StatefulWidget {
+  final String tag;
+  final List places;
+  CategoriesDetail({required this.tag, required this.places});
 
   @override
-  State<Bookmarks> createState() => _BookmarksState();
+  State<CategoriesDetail> createState() => _CategoriesDetailState();
 }
 
-class _BookmarksState extends State<Bookmarks> {
-  List userBookmark = [];
+class _CategoriesDetailState extends State<CategoriesDetail> {
+  List taggedPlaces = [];
   List bookmarkStatus = [];
+  List userBookmark = [];
+
+  void fetchPlaces() async {
+    await FirebaseFirestore.instance
+        .collection("places")
+        .where(FieldPath.documentId, whereIn: widget.places)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        if (doc.id != "dummy") {
+          setState(() {
+            taggedPlaces.add(doc);
+          });
+          bookmarkStatus.add(false);
+        }
+      });
+    });
+  }
 
   void fetchBookmark() async {
     await FirebaseFirestore.instance
@@ -29,14 +49,46 @@ class _BookmarksState extends State<Bookmarks> {
           setState(() {
             userBookmark.add(doc);
           });
-          bookmarkStatus.add(true);
         }
       });
     });
+    for (int i = 0; i < taggedPlaces.length; i++) {
+      for (int j = 0; j < userBookmark.length; j++) {
+        if (taggedPlaces[i].id == userBookmark[j].id) {
+          setState(() {
+            bookmarkStatus[i] = true;
+          });
+          break;
+        }
+      }
+    }
   }
 
   initState() {
+    print(widget.places);
+    fetchPlaces();
     fetchBookmark();
+  }
+
+  void addBookMark(int index) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection("bookmarks")
+        .doc(taggedPlaces[index].id)
+        .set({
+      'name': taggedPlaces[index]['name'],
+      'address': taggedPlaces[index]['address'],
+      'description': taggedPlaces[index]['description'],
+      'pictures': taggedPlaces[index]['pictures'][0],
+    });
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => CategoriesDetail(
+                  tag: widget.tag,
+                  places: widget.places,
+                )));
   }
 
   void removeBookMark(int index) async {
@@ -44,7 +96,7 @@ class _BookmarksState extends State<Bookmarks> {
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser?.uid)
         .collection("bookmarks")
-        .doc(userBookmark[index].id)
+        .doc(taggedPlaces[index].id)
         .delete();
   }
 
@@ -54,11 +106,18 @@ class _BookmarksState extends State<Bookmarks> {
         bookmarkStatus[index] = false;
       });
       removeBookMark(index);
-      Navigator.popAndPushNamed(context, '/second');
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => CategoriesDetail(
+                    tag: widget.tag,
+                    places: widget.places,
+                  )));
     } else {
       setState(() {
         bookmarkStatus[index] = true;
       });
+      addBookMark(index);
     }
   }
 
@@ -70,7 +129,7 @@ class _BookmarksState extends State<Bookmarks> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: const Text(
-            "Bookmarks",
+            "Categories",
             style: TextStyle(
               fontFamily: 'Varela Round',
               fontWeight: FontWeight.bold,
@@ -87,9 +146,19 @@ class _BookmarksState extends State<Bookmarks> {
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
-                  itemCount: userBookmark.length,
+                  itemCount: taggedPlaces.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DetailPage(
+                                      placeID: taggedPlaces[index].id,
+                                      navindex: 2,
+                                    )),
+                          );
+                        },
                         child: Padding(
                           padding: EdgeInsets.all(5),
                           child: Container(
@@ -111,7 +180,7 @@ class _BookmarksState extends State<Bookmarks> {
                                                   .width -
                                               50,
                                           child: Text(
-                                            userBookmark[index]['name'],
+                                            taggedPlaces[index]['name'],
                                             style: TextStyle(
                                               fontFamily: "Varela Round",
                                               fontSize: 14,
@@ -131,7 +200,7 @@ class _BookmarksState extends State<Bookmarks> {
                                                 size: 15,
                                               ),
                                               Text(
-                                                userBookmark[index]['address'],
+                                                taggedPlaces[index]['address'],
                                                 style: TextStyle(
                                                   fontFamily: "Varela Round",
                                                   fontSize: 12,
@@ -182,7 +251,7 @@ class _BookmarksState extends State<Bookmarks> {
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: NetworkImage(
-                                          userBookmark[index]["pictures"]),
+                                          taggedPlaces[index]["pictures"][0]),
                                     ),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20)),
@@ -191,23 +260,14 @@ class _BookmarksState extends State<Bookmarks> {
                               ],
                             ),
                           ),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailPage(
-                                  placeID: userBookmark[index].id, navindex: 1),
-                            ),
-                          );
-                        });
+                        ));
                   },
                 ),
               ),
             ),
           ],
         ),
-        bottomNavigationBar: NaviBar(tabIndex: 1),
+        bottomNavigationBar: NaviBar(tabIndex: 2),
       );
     } catch (e) {
       return Container();
