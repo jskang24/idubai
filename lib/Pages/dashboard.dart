@@ -8,8 +8,7 @@ import './bookmarks.dart';
 import './categories.dart';
 import './details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-// H
+import './searchscreen.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -19,6 +18,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  TextEditingController _searchController = new TextEditingController();
+  var _formkey;
   List popularPlaces = [];
   List recentPlaces = [];
   List userBookmark = [];
@@ -298,19 +299,43 @@ class _DashboardState extends State<Dashboard> {
                               children: [
                                 Container(
                                   height: 30,
+                                  width:
+                                      MediaQuery.of(context).size.width - 110,
                                   child: TextField(
+                                    onSubmitted: (value) {
+                                      if (_searchController.text.length > 0) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SearchScreen(
+                                                      search: _searchController
+                                                          .text)),
+                                        );
+                                      }
+                                    },
+                                    controller: _searchController,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Search...",
                                     ),
                                     style: TextStyle(fontSize: 14),
                                   ),
-                                  width: 300,
                                 ),
                                 IconButton(
                                   padding: EdgeInsets.zero,
                                   icon: Icon(Icons.search),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    if (_searchController.text.length > 0) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => SearchScreen(
+                                                search:
+                                                    _searchController.text)),
+                                      );
+                                    }
+                                  },
                                 ),
                               ],
                             ),
@@ -349,150 +374,162 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                   Container(
-                    height: 255,
-                    width: MediaQuery.of(context).size.width,
-                    child: Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: popularPlaces.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            try {
-                              return GestureDetector(
-                                child: Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Container(
-                                    width: 150,
-                                    height: 240,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
+                      height: 255,
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: popularPlaces.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  try {
+                                    return GestureDetector(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Container(
                                           width: 150,
-                                          height: 190,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                  popularPlaces[index]
-                                                      ["pictures"][0]),
-                                            ),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                          ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Container(
-                                          width: 150,
-                                          height: 50,
-                                          child: Row(
+                                          height: 240,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                    width: 130,
-                                                    child: Text(
-                                                      popularPlaces[index]
-                                                          ['name'],
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            "Varela Round",
-                                                        fontSize: 14,
-                                                      ),
-                                                      // textAlign: TextAlign.left,
-                                                    ),
+                                              Container(
+                                                width: 150,
+                                                height: 190,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        popularPlaces[index]
+                                                            ["pictures"][0]),
                                                   ),
-                                                  Container(
-                                                    width: 130,
-                                                    child: Row(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(20)),
+                                                ),
+                                              ),
+                                              SizedBox(height: 5),
+                                              Container(
+                                                width: 150,
+                                                height: 50,
+                                                child: Row(
+                                                  children: [
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
-                                                        Icon(
-                                                          Icons.location_pin,
-                                                          size: 15,
-                                                        ),
-                                                        Text(
-                                                          popularPlaces[index]
-                                                              ['address'],
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                "Varela Round",
-                                                            fontSize: 12,
-                                                            color: Colors.grey,
+                                                        Container(
+                                                          width: 130,
+                                                          child: Text(
+                                                            popularPlaces[index]
+                                                                ['name'],
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  "Varela Round",
+                                                              fontSize: 14,
+                                                            ),
+                                                            // textAlign: TextAlign.left,
                                                           ),
-                                                          // textAlign: TextAlign.left,
+                                                        ),
+                                                        Container(
+                                                          width: 130,
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons
+                                                                    .location_pin,
+                                                                size: 15,
+                                                              ),
+                                                              Text(
+                                                                popularPlaces[
+                                                                        index]
+                                                                    ['address'],
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      "Varela Round",
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                                // textAlign: TextAlign.left,
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Column(
-                                                children: [
-                                                  Container(
-                                                    width: 20,
-                                                    height: 20,
-                                                    child: IconButton(
-                                                      icon:
-                                                          popularBookmark[index]
-                                                              ? Icon(
-                                                                  Icons
-                                                                      .bookmark,
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          238,
-                                                                          223,
-                                                                          90),
-                                                                )
-                                                              : Icon(
-                                                                  Icons
-                                                                      .bookmark_outline,
-                                                                ),
-                                                      iconSize: 20,
-                                                      padding: EdgeInsets.zero,
-                                                      onPressed: () {
-                                                        changePopularBookMark(
-                                                            index);
-                                                      },
+                                                    Column(
+                                                      children: [
+                                                        Container(
+                                                          width: 20,
+                                                          height: 20,
+                                                          child: IconButton(
+                                                            icon:
+                                                                popularBookmark[
+                                                                        index]
+                                                                    ? Icon(
+                                                                        Icons
+                                                                            .bookmark,
+                                                                        color: Color.fromARGB(
+                                                                            255,
+                                                                            238,
+                                                                            223,
+                                                                            90),
+                                                                      )
+                                                                    : Icon(
+                                                                        Icons
+                                                                            .bookmark_outline,
+                                                                      ),
+                                                            iconSize: 20,
+                                                            padding:
+                                                                EdgeInsets.zero,
+                                                            onPressed: () {
+                                                              changePopularBookMark(
+                                                                  index);
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
-                                                ],
+                                                    SizedBox(height: 30),
+                                                  ],
+                                                ),
                                               ),
-                                              SizedBox(height: 30),
                                             ],
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => DetailPage(
-                                          placeID: popularPlaces[index].id,
-                                          navindex: 0),
-                                    ),
-                                  );
+                                      ),
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DetailPage(
+                                                placeID:
+                                                    popularPlaces[index].id,
+                                                navindex: 0),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  } catch (e) {
+                                    return Container();
+                                  }
                                 },
-                              );
-                            } catch (e) {
-                              return Container();
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
                   Padding(
                     padding: EdgeInsets.fromLTRB(10, 20, 20, 10),
                     child: Container(
@@ -509,150 +546,166 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                   Container(
-                    height: 255,
-                    width: MediaQuery.of(context).size.width,
-                    child: Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: recentPlaces.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            try {
-                              return GestureDetector(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: Container(
-                                      width: 150,
-                                      height: 240,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
+                      height: 255,
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: recentPlaces.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  try {
+                                    return GestureDetector(
+                                        child: Padding(
+                                          padding: EdgeInsets.all(5),
+                                          child: Container(
                                             width: 150,
-                                            height: 190,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: NetworkImage(
-                                                    recentPlaces[index]
-                                                        ["pictures"][0]),
-                                              ),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)),
-                                            ),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Container(
-                                            width: 150,
-                                            height: 50,
-                                            child: Row(
+                                            height: 240,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      width: 130,
-                                                      child: Text(
-                                                        recentPlaces[index]
-                                                            ['name'],
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              "Varela Round",
-                                                          fontSize: 14,
-                                                        ),
-                                                        // textAlign: TextAlign.left,
-                                                      ),
+                                                Container(
+                                                  width: 150,
+                                                  height: 190,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                      fit: BoxFit.cover,
+                                                      image: NetworkImage(
+                                                          recentPlaces[index]
+                                                              ["pictures"][0]),
                                                     ),
-                                                    Container(
-                                                      width: 130,
-                                                      child: Row(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                20)),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 5),
+                                                Container(
+                                                  width: 150,
+                                                  height: 50,
+                                                  child: Row(
+                                                    children: [
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
-                                                          Icon(
-                                                            Icons.location_pin,
-                                                            size: 15,
-                                                          ),
-                                                          Text(
-                                                            recentPlaces[index]
-                                                                ["address"],
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  "Varela Round",
-                                                              fontSize: 12,
-                                                              color:
-                                                                  Colors.grey,
+                                                          Container(
+                                                            width: 130,
+                                                            child: Text(
+                                                              recentPlaces[
+                                                                      index]
+                                                                  ['name'],
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    "Varela Round",
+                                                                fontSize: 14,
+                                                              ),
+                                                              // textAlign: TextAlign.left,
                                                             ),
-                                                            // textAlign: TextAlign.left,
+                                                          ),
+                                                          Container(
+                                                            width: 130,
+                                                            child: Row(
+                                                              children: [
+                                                                Icon(
+                                                                  Icons
+                                                                      .location_pin,
+                                                                  size: 15,
+                                                                ),
+                                                                Text(
+                                                                  recentPlaces[
+                                                                          index]
+                                                                      [
+                                                                      "address"],
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontFamily:
+                                                                        "Varela Round",
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                  // textAlign: TextAlign.left,
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    Container(
-                                                      width: 20,
-                                                      height: 20,
-                                                      child: IconButton(
-                                                        icon: recentBookmark[
-                                                                index]
-                                                            ? Icon(
-                                                                Icons.bookmark,
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        238,
-                                                                        223,
-                                                                        90),
-                                                              )
-                                                            : Icon(
-                                                                Icons
-                                                                    .bookmark_outline,
-                                                              ),
-                                                        iconSize: 20,
-                                                        padding:
-                                                            EdgeInsets.zero,
-                                                        onPressed: () {
-                                                          changeRecentBookMark(
-                                                              index);
-                                                        },
+                                                      Column(
+                                                        children: [
+                                                          Container(
+                                                            width: 20,
+                                                            height: 20,
+                                                            child: IconButton(
+                                                              icon:
+                                                                  recentBookmark[
+                                                                          index]
+                                                                      ? Icon(
+                                                                          Icons
+                                                                              .bookmark,
+                                                                          color: Color.fromARGB(
+                                                                              255,
+                                                                              238,
+                                                                              223,
+                                                                              90),
+                                                                        )
+                                                                      : Icon(
+                                                                          Icons
+                                                                              .bookmark_outline,
+                                                                        ),
+                                                              iconSize: 20,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              onPressed: () {
+                                                                changeRecentBookMark(
+                                                                    index);
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ),
-                                                  ],
+                                                      SizedBox(height: 30),
+                                                    ],
+                                                  ),
                                                 ),
-                                                SizedBox(height: 30),
                                               ],
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DetailPage(
-                                            placeID: recentPlaces[index].id,
-                                            navindex: 0),
-                                      ),
-                                    );
-                                  });
-                            } catch (e) {
-                              return Container();
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => DetailPage(
+                                                  placeID:
+                                                      recentPlaces[index].id,
+                                                  navindex: 0),
+                                            ),
+                                          );
+                                        });
+                                  } catch (e) {
+                                    return Container();
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),

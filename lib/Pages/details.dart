@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../Widgets/naviBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import './mapscreen.dart';
 
 class DetailPage extends StatefulWidget {
   final String placeID;
@@ -216,14 +217,22 @@ class _detailPageState extends State<DetailPage> {
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(100, 96, 193, 200),
+                        elevation: 10,
+                        primary: Color.fromARGB(255, 96, 193, 200),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0)),
                         minimumSize: Size(170, 50), //////// HERE
                         textStyle: const TextStyle(
                             fontSize: 14, fontFamily: "Varela Round"),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MapScreen(),
+                          ),
+                        );
+                      },
                       child: Row(children: [
                         Icon(Icons.local_taxi),
                         SizedBox(width: 5),
@@ -235,6 +244,7 @@ class _detailPageState extends State<DetailPage> {
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        elevation: 10,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0)),
                         minimumSize: Size(170, 50), //////// HERE
