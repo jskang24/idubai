@@ -69,7 +69,7 @@ class _detailPageState extends State<DetailPage> {
           panel: Column(
             children: [
               Container(
-                height: 425,
+                height: 500,
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: EdgeInsets.all(15),
@@ -209,66 +209,66 @@ class _detailPageState extends State<DetailPage> {
                   ),
                 ),
               ),
-              Container(
-                height: 75,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 10,
-                        primary: Color.fromARGB(255, 96, 193, 200),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        minimumSize: Size(170, 50), //////// HERE
-                        textStyle: const TextStyle(
-                            fontSize: 14, fontFamily: "Varela Round"),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MapScreen(),
-                          ),
-                        );
-                      },
-                      child: Row(children: [
-                        Icon(Icons.local_taxi),
-                        SizedBox(width: 5),
-                        const Text('Find Way')
-                      ]),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 10,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        minimumSize: Size(170, 50), //////// HERE
-                        textStyle: const TextStyle(
-                            fontSize: 14, fontFamily: "Varela Round"),
-                        primary: Color.fromARGB(0xff, 0x2E, 0x92, 0xD0),
-                      ),
-                      onPressed: () {},
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            color: Colors.white,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          const Text('Look Around'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   height: 75,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     children: [
+              //       ElevatedButton(
+              //         style: ElevatedButton.styleFrom(
+              //           elevation: 10,
+              //           primary: Color.fromARGB(255, 96, 193, 200),
+              //           shape: RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.circular(10.0)),
+              //           minimumSize: Size(170, 50), //////// HERE
+              //           textStyle: const TextStyle(
+              //               fontSize: 14, fontFamily: "Varela Round"),
+              //         ),
+              //         onPressed: () {
+              //           Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //               builder: (context) => MapScreen(),
+              //             ),
+              //           );
+              //         },
+              //         child: Row(children: [
+              //           Icon(Icons.local_taxi),
+              //           SizedBox(width: 5),
+              //           const Text('Find Way')
+              //         ]),
+              //       ),
+              //       Padding(
+              //         padding: EdgeInsets.all(10),
+              //       ),
+              //       ElevatedButton(
+              //         style: ElevatedButton.styleFrom(
+              //           elevation: 10,
+              //           shape: RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.circular(10.0)),
+              //           minimumSize: Size(170, 50), //////// HERE
+              //           textStyle: const TextStyle(
+              //               fontSize: 14, fontFamily: "Varela Round"),
+              //           primary: Color.fromARGB(0xff, 0x2E, 0x92, 0xD0),
+              //         ),
+              //         onPressed: () {},
+              //         child: Row(
+              //           children: [
+              //             Icon(
+              //               Icons.location_on_outlined,
+              //               color: Colors.white,
+              //             ),
+              //             SizedBox(
+              //               width: 5,
+              //             ),
+              //             const Text('Look Around'),
+              //           ],
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
           body: Image(

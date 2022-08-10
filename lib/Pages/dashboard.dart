@@ -107,22 +107,22 @@ class _DashboardState extends State<Dashboard> {
         setState(() {
           userBookmark.add(doc);
         });
+      });
+      setState(() {
         for (int i = 0; i < recentPlaces.length; i++) {
           for (int j = 0; j < userBookmark.length; j++) {
             if (recentPlaces[i].id == userBookmark[j].id) {
-              setState(() {
-                recentBookmark[i] = true;
-              });
+              recentBookmark[i] = true;
               break;
             }
           }
         }
+      });
+      setState(() {
         for (int i = 0; i < popularPlaces.length; i++) {
           for (int j = 0; j < userBookmark.length; j++) {
             if (popularPlaces[i].id == userBookmark[j].id) {
-              setState(() {
-                popularBookmark[i] = true;
-              });
+              popularBookmark[i] = true;
               break;
             }
           }
@@ -134,8 +134,8 @@ class _DashboardState extends State<Dashboard> {
   initState() {
     fetchPopular();
     fetchRecent();
-    fetchBookmark();
     fetchMain();
+    fetchBookmark();
     // print(imgList);
   }
 
@@ -151,6 +151,12 @@ class _DashboardState extends State<Dashboard> {
       'description': recentPlaces[index]['description'],
       'pictures': recentPlaces[index]['pictures'][0],
     });
+    await FirebaseFirestore.instance
+        .collection("places")
+        .doc(recentPlaces[index].id)
+        .update({
+      'numBookmark': recentPlaces[index]['numBookmark'] + 1,
+    });
     Navigator.popAndPushNamed(context, '/');
   }
 
@@ -161,6 +167,12 @@ class _DashboardState extends State<Dashboard> {
         .collection("bookmarks")
         .doc(recentPlaces[index].id)
         .delete();
+    await FirebaseFirestore.instance
+        .collection("places")
+        .doc(recentPlaces[index].id)
+        .update({
+      'numBookmark': recentPlaces[index]['numBookmark'] - 1,
+    });
     Navigator.popAndPushNamed(context, '/');
   }
 
@@ -176,7 +188,12 @@ class _DashboardState extends State<Dashboard> {
       'description': popularPlaces[index]['description'],
       'pictures': popularPlaces[index]['pictures'][0],
     });
-    print(popularPlaces[index].id);
+    await FirebaseFirestore.instance
+        .collection("places")
+        .doc(popularPlaces[index].id)
+        .update({
+      'numBookmark': popularPlaces[index]['numBookmark'] + 1,
+    });
     Navigator.popAndPushNamed(context, '/');
   }
 
@@ -187,6 +204,12 @@ class _DashboardState extends State<Dashboard> {
         .collection("bookmarks")
         .doc(popularPlaces[index].id)
         .delete();
+    await FirebaseFirestore.instance
+        .collection("places")
+        .doc(popularPlaces[index].id)
+        .update({
+      'numBookmark': popularPlaces[index]['numBookmark'] - 1,
+    });
     Navigator.popAndPushNamed(context, '/');
   }
 
@@ -202,7 +225,6 @@ class _DashboardState extends State<Dashboard> {
       });
       addRecentBookMark(index);
     }
-    print(recentBookmark);
   }
 
   void changePopularBookMark(int index) {
@@ -218,7 +240,6 @@ class _DashboardState extends State<Dashboard> {
       print(popularPlaces[index].id);
       addPopularBookMark(index);
     }
-    print(popularBookmark);
   }
 
   void genCarousel() async {

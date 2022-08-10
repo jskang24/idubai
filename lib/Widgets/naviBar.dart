@@ -31,10 +31,10 @@ class _NaviBarState extends State<NaviBar> {
       'Categories',
       style: optionStyle,
     ),
-    Text(
-      'Settings',
-      style: optionStyle,
-    ),
+    // Text(
+    //   'Settings',
+    //   style: optionStyle,
+    // ),
   ];
 
   @override
@@ -64,10 +64,10 @@ class _NaviBarState extends State<NaviBar> {
             icon: LineIcons.icons,
             text: 'Categories',
           ),
-          GButton(
-            icon: LineIcons.cog,
-            text: 'Settings',
-          ),
+          // GButton(
+          //   icon: LineIcons.cog,
+          //   text: 'Settings',
+          // ),
         ],
         selectedIndex: _selectedIndex,
         onTabChange: (index) {
@@ -84,9 +84,9 @@ class _NaviBarState extends State<NaviBar> {
             case 2:
               Navigator.pushNamed(context, "/third");
               break;
-            case 3:
-              Navigator.pushNamed(context, "/fourth");
-              break;
+            // case 3:
+            //   Navigator.pushNamed(context, "/fourth");
+            //   break;
           }
         },
       ),

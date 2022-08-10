@@ -32,6 +32,7 @@ class _CategoriesState extends State<Categories> {
             .get()
             .then((DocumentSnapshot doc) {
           setState(() {
+            print(doc['pictures']);
             imgurl.add(doc["pictures"][0]);
           });
         });

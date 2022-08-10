@@ -40,12 +40,29 @@ class _BookmarksState extends State<Bookmarks> {
   }
 
   void removeBookMark(int index) async {
+    int numBookmark = 0;
     await FirebaseFirestore.instance
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser?.uid)
         .collection("bookmarks")
         .doc(userBookmark[index].id)
         .delete();
+    await FirebaseFirestore.instance
+        .collection("places")
+        .where('name', isEqualTo: userBookmark[index]['name'])
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        numBookmark = doc['numBookmark'];
+      });
+    });
+    print(numBookmark);
+    await FirebaseFirestore.instance
+        .collection("places")
+        .doc(userBookmark[index].id)
+        .update({
+      'numBookmark': numBookmark - 1,
+    });
   }
 
   void changeBookMark(int index) {
